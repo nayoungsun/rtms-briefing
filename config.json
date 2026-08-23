@@ -1,0 +1,90 @@
+{
+  "_comment": "대상 지역 법정동 시군구 코드(LAWD_CD) 및 리포트 설정",
+  "regions": [
+    {"code": "11110", "sido": "서울", "sgg": "종로구"},
+    {"code": "11140", "sido": "서울", "sgg": "중구"},
+    {"code": "11170", "sido": "서울", "sgg": "용산구"},
+    {"code": "11200", "sido": "서울", "sgg": "성동구"},
+    {"code": "11215", "sido": "서울", "sgg": "광진구"},
+    {"code": "11230", "sido": "서울", "sgg": "동대문구"},
+    {"code": "11260", "sido": "서울", "sgg": "중랑구"},
+    {"code": "11290", "sido": "서울", "sgg": "성북구"},
+    {"code": "11305", "sido": "서울", "sgg": "강북구"},
+    {"code": "11320", "sido": "서울", "sgg": "도봉구"},
+    {"code": "11350", "sido": "서울", "sgg": "노원구"},
+    {"code": "11380", "sido": "서울", "sgg": "은평구"},
+    {"code": "11410", "sido": "서울", "sgg": "서대문구"},
+    {"code": "11440", "sido": "서울", "sgg": "마포구"},
+    {"code": "11470", "sido": "서울", "sgg": "양천구"},
+    {"code": "11500", "sido": "서울", "sgg": "강서구"},
+    {"code": "11530", "sido": "서울", "sgg": "구로구"},
+    {"code": "11545", "sido": "서울", "sgg": "금천구"},
+    {"code": "11560", "sido": "서울", "sgg": "영등포구"},
+    {"code": "11590", "sido": "서울", "sgg": "동작구"},
+    {"code": "11620", "sido": "서울", "sgg": "관악구"},
+    {"code": "11650", "sido": "서울", "sgg": "서초구"},
+    {"code": "11680", "sido": "서울", "sgg": "강남구"},
+    {"code": "11710", "sido": "서울", "sgg": "송파구"},
+    {"code": "11740", "sido": "서울", "sgg": "강동구"},
+
+    {"code": "41111", "sido": "수원", "sgg": "장안구"},
+    {"code": "41113", "sido": "수원", "sgg": "권선구"},
+    {"code": "41115", "sido": "수원", "sgg": "팔달구"},
+    {"code": "41117", "sido": "수원", "sgg": "영통구"},
+
+    {"code": "41131", "sido": "성남", "sgg": "수정구"},
+    {"code": "41133", "sido": "성남", "sgg": "중원구"},
+    {"code": "41135", "sido": "성남", "sgg": "분당구"},
+
+    {"code": "41210", "sido": "광명", "sgg": "광명시"},
+    {"code": "41290", "sido": "과천", "sgg": "과천시"},
+
+    {"code": "41461", "sido": "용인", "sgg": "처인구"},
+    {"code": "41463", "sido": "용인", "sgg": "기흥구"},
+    {"code": "41465", "sido": "용인", "sgg": "수지구"}
+  ],
+
+  "_comment_gwangmyeong": "광명은 사용자 요청상 철산동 중심. 시 전체를 수집하되 렌더링 시 철산동을 우선 표기한다.",
+  "gwangmyeong_priority_dong": ["철산동"],
+
+  "bands": [
+    {"id": "b10", "label": "10억 전후", "min": 85000, "max": 115000},
+    {"id": "b15", "label": "15억 전후", "min": 130000, "max": 170000},
+    {"id": "b20", "label": "20억 전후", "min": 180000, "max": 220000}
+  ],
+
+  "_comment_history": "직전거래 비교용으로 거슬러 올라갈 개월 수",
+  "history_months": 8,
+  "_comment_diff": "신규 등록 여부를 판정할 스냅샷 창(개월). 신고기한이 계약 후 30일이므로 3개월이면 충분",
+  "diff_months": 3,
+
+  "_comment_redev": "재건축/재개발 이슈 단지 워치리스트. name_contains 는 API 의 aptNm 부분일치로 매칭한다. 자동 판정(준공 30년 경과)과 별개로 구체 진행단계를 붙여 표시한다.",
+  "redevelopment_watchlist": [
+    {"sgg": "과천시", "name_contains": "주공10", "stage": "재건축 추진 (1984년 준공·재건축연한 도래, 과천 잔여 주공 단지)"},
+    {"sgg": "과천시", "name_contains": "주공8", "stage": "관리처분인가 (2025년 인가·이주 단계)"},
+    {"sgg": "과천시", "name_contains": "주공9", "stage": "관리처분인가 (2025년 인가·이주 단계)"},
+    {"sgg": "과천시", "name_contains": "주공5", "stage": "재건축 3기 추진 구역"},
+
+    {"sgg": "광명시", "name_contains": "철산주공", "stage": "철산 주공 재건축 벨트"},
+    {"sgg": "광명시", "name_contains": "하안주공", "stage": "하안 주공 재건축 추진 (광명 재건축 대상지)"},
+
+    {"sgg": "수정구", "name_contains": "신흥", "stage": "신흥1·3구역 재개발 영향권"},
+    {"sgg": "수정구", "name_contains": "수진", "stage": "수진1구역 공공재개발 (이주 단계)"},
+    {"sgg": "수정구", "name_contains": "태평", "stage": "태평3구역 재개발 영향권"},
+    {"sgg": "중원구", "name_contains": "상대원", "stage": "상대원3구역 재개발 영향권"},
+    {"sgg": "중원구", "name_contains": "은행", "stage": "은행주공 재건축"},
+
+    {"sgg": "분당구", "name_contains": "시범", "stage": "1기 신도시 선도지구 (분당)"},
+    {"sgg": "분당구", "name_contains": "양지", "stage": "1기 신도시 선도지구 (분당)"},
+    {"sgg": "분당구", "name_contains": "샛별", "stage": "1기 신도시 선도지구 (분당)"},
+
+    {"sgg": "양천구", "name_contains": "목동", "stage": "목동 신시가지 재건축"},
+    {"sgg": "노원구", "name_contains": "상계주공", "stage": "상계 주공 재건축"},
+    {"sgg": "강남구", "name_contains": "은마", "stage": "은마아파트 재건축"},
+    {"sgg": "강남구", "name_contains": "압구정", "stage": "압구정 재건축 특별계획구역"},
+    {"sgg": "송파구", "name_contains": "주공5", "stage": "잠실주공5단지 재건축"},
+    {"sgg": "영등포구", "name_contains": "시범", "stage": "여의도 재건축"},
+    {"sgg": "영등포구", "name_contains": "삼부", "stage": "여의도 재건축"},
+    {"sgg": "영등포구", "name_contains": "한양", "stage": "여의도 재건축"}
+  ]
+}
