@@ -54,7 +54,7 @@
   ],
 
   "_comment_history": "직전거래 비교용으로 거슬러 올라갈 개월 수",
-  "history_months": 8,
+  "history_months": 5,
   "_comment_diff": "신규 등록 여부를 판정할 스냅샷 창(개월). 신고기한이 계약 후 30일이므로 3개월이면 충분",
   "diff_months": 3,
 
