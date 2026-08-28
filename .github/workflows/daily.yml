@@ -3,6 +3,7 @@ name: 실거래 등록 브리핑
 on:
   schedule:
     - cron: '30 21 * * *'
+    - cron: '0 22 * * *'    # 07:00 KST (예비 — 앞쪽이 스킵될 경우 대비)
   workflow_dispatch:
 
 permissions:
