@@ -2,9 +2,14 @@ name: 실거래 등록 브리핑
 
 on:
   schedule:
-    - cron: '30 21 * * *'
+    - cron: '30 21 * * *'   # 06:30 KST
     - cron: '0 22 * * *'    # 07:00 KST (예비 — 앞쪽이 스킵될 경우 대비)
   workflow_dispatch:
+    inputs:
+      force:
+        description: '오늘 이미 수집됐어도 강제로 다시 수집'
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -16,7 +21,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
 
     steps:
       - uses: actions/checkout@v4
@@ -25,16 +30,33 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: 오늘 이미 수집됐는지 확인
+        id: guard
+        run: |
+          if [ "${{ github.event.inputs.force }}" = "true" ]; then
+            echo "강제 실행 — 가드 무시하고 수집합니다"
+            echo "done=false" >> "$GITHUB_OUTPUT"
+          elif python -c "import gzip,json,sys;from datetime import datetime,timezone,timedelta;d=json.load(gzip.open('prev_snapshot.json.gz','rt',encoding='utf-8'));sys.exit(0 if d.get('meta',{}).get('report_date')==datetime.now(timezone(timedelta(hours=9))).date().isoformat() else 1)" 2>/dev/null; then
+            echo "오늘치 이미 완료 — 이후 단계를 건너뜁니다"
+            echo "done=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "오늘치 아직 없음 — 수집을 진행합니다"
+            echo "done=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: 실거래 수집 (실패 시 2분 뒤 1회 재시도)
+        if: steps.guard.outputs.done != 'true'
         env:
           MOLIT_SERVICE_KEY: ${{ secrets.MOLIT_SERVICE_KEY }}
         run: |
           python rtms.py || { echo "재시도합니다..."; sleep 120; python rtms.py; }
 
       - name: 리포트 페이지 생성
+        if: steps.guard.outputs.done != 'true'
         run: python build_site.py
 
       - name: 결과 커밋
+        if: steps.guard.outputs.done != 'true'
         run: |
           git config user.name  "rtms-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -43,5 +65,5 @@ jobs:
             echo "변경 없음"
           else
             git commit -m "브리핑 $(TZ=Asia/Seoul date +%Y-%m-%d)"
-            git push
+            git push || { git pull --rebase && git push; }
           fi
