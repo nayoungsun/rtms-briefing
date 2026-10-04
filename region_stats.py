@@ -55,6 +55,21 @@ def parse_key(key: str):
     return {"sgg": sgg, "area": area, "ym": ym, "amount": amount, "cancel": bool(cancel.strip())}
 
 
+def band_check(doc: dict) -> dict:
+    """검산값: 지역 수·행 수·거래건수 합·평균가 합·최고가 합."""
+    regions_with_data = rows = sum_count = sum_avg = sum_max = 0
+    for r in doc["regions"].values():
+        if r["m"]:
+            regions_with_data += 1
+        for row in r["m"]:
+            rows += 1
+            sum_avg += row[1]
+            sum_count += row[4]
+            sum_max += row[5]
+    return {"regions": len(doc["regions"]), "regions_with_data": regions_with_data,
+            "rows": rows, "sum_count": sum_count, "sum_avg": sum_avg, "sum_max": sum_max}
+
+
 def main() -> None:
     with open(os.path.join(HERE, "config.json"), encoding="utf-8") as f:
         cfg = json.load(f)
@@ -127,6 +142,15 @@ def main() -> None:
            "records_used": n_ok, "fresh_months": fresh_months, "bands": out_bands}
     with open(prev_path, "w", encoding="utf-8") as f:
         json.dump(out, f, ensure_ascii=False, separators=(",", ":"))
+
+    # 2026-10-04 추가: 밴드별 작은 파일 + 검산값(check).
+    # 예약 작업은 curl 대신 WebFetch로 이 파일을 받고, 받은 숫자로 check를 다시 계산해
+    # 일치할 때만 흐름판에 쓴다(숫자가 요약·변형되면 불일치로 걸러진다).
+    for b, doc in out_bands.items():
+        doc = dict(doc)
+        doc["check"] = band_check(doc)
+        with open(os.path.join(HERE, f"regions_{b}.json"), "w", encoding="utf-8") as f:
+            json.dump(doc, f, ensure_ascii=False, separators=(",", ":"))
     print(f"[지역 통계] regions.json 저장 — 거래 {n_ok:,}건, 월 {fresh_months}", file=sys.stderr)
 
 
