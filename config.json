@@ -58,6 +58,14 @@
   "_comment_diff": "신규 등록 여부를 판정할 스냅샷 창(개월). 신고기한이 계약 후 30일이므로 3개월이면 충분",
   "diff_months": 3,
 
+  "_comment_watch": "고정 관심 단지 체결 장부(watch_stats.py → watch.json). lawd + umd(법정동) + apt_names(원장 단지명 정확 일치)로 잡는다.",
+  "watch_complexes": [
+    {"id": "namsan", "label": "남산타운", "lawd": "11140", "umd": "신당동", "apt_names": ["남산타운"],
+     "note": "원장은 분양/임대 구분 없이 '남산타운' 단일 이름"},
+    {"id": "cheonggye", "label": "청계현대", "lawd": "11200", "umd": "마장동", "apt_names": ["현대"],
+     "note": "원장 단지명은 '현대'(K-apt 청계현대아파트 A13381608) · 마장동의 '현대'는 이 단지 하나"}
+  ],
+
   "_comment_redev": "재건축/재개발 이슈 단지 워치리스트. name_contains 는 API 의 aptNm 부분일치로 매칭한다. 자동 판정(준공 30년 경과)과 별개로 구체 진행단계를 붙여 표시한다.",
   "redevelopment_watchlist": [
     {"sgg": "과천시", "name_contains": "주공10", "stage": "재건축 추진 (1984년 준공·재건축연한 도래, 과천 잔여 주공 단지)"},

@@ -280,6 +280,28 @@ def redevelopment_note(row: dict, watchlist: list[dict], this_year: int) -> str 
     return None
 
 
+def floor_band(floor: str) -> str | None:
+    """층대: 저층(3층 이하) · 중층(4~9층) · 고층(10층 이상). 숫자가 아니면 None."""
+    try:
+        f = int(str(floor).strip())
+    except ValueError:
+        return None
+    return "저층" if f <= 3 else ("중층" if f <= 9 else "고층")
+
+
+def find_previous_same_band(row: dict, history: list[dict]) -> dict | None:
+    """같은 단지·같은 평형·같은 층대의 직전 거래(계약일 기준 이전, 해제건 제외)."""
+    fb = floor_band(row["floor"])
+    if fb is None:
+        return None
+    d = deal_date(row)
+    cands = [h for h in history
+             if deal_date(h) < d and not h.get("cdealType") and floor_band(h["floor"]) == fb]
+    if not cands:
+        return None
+    return max(cands, key=lambda h: (deal_date(h), h["dealAmount"]))
+
+
 def band_of(amount: int, bands: list[dict]) -> dict | None:
     for b in bands:
         if b["min"] <= amount <= b["max"]:
@@ -324,6 +346,20 @@ def analyse(new_rows: list[dict], all_rows: list[dict], cfg: dict,
             item["diff"] = diff
             item["diff_txt"] = delta_str(diff)
             item["diff_pct"] = round(diff / prev["dealAmount"] * 100, 1)
+            # 2026-10-05 추가: 직전거래의 층과, 층대가 다르면 같은 층대의 직전거래
+            item["prev_floor"] = prev["floor"]
+            item["floor_band"] = floor_band(r["floor"])
+            item["prev_floor_band"] = floor_band(prev["floor"])
+            if item["floor_band"] and item["floor_band"] != item["prev_floor_band"]:
+                sb = find_previous_same_band(r, by_unit[unit_key(r)])
+                if sb:
+                    sdiff = r["dealAmount"] - sb["dealAmount"]
+                    item["same_band_prev"] = {
+                        "date": deal_date(sb), "floor": sb["floor"],
+                        "amount_txt": won(sb["dealAmount"]),
+                        "diff_pct": round(sdiff / sb["dealAmount"] * 100, 1)}
+                else:
+                    item["same_band_prev"] = None
         else:
             item["diff"] = None
             item["diff_txt"] = "직전거래 확인 불가"

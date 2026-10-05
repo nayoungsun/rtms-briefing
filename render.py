@@ -155,8 +155,14 @@ def row_html(it: dict) -> str:
         chg = '<span class="pill na">보합</span>'
 
     if it.get("prev_date"):
-        chg += (f'<span class="prev">직전 {esc(it["prev_date"])} · '
+        pf = f' · {esc(it["prev_floor"])}층' if it.get("prev_floor") else ""
+        chg += (f'<span class="prev">직전 {esc(it["prev_date"])}{pf} · '
                 f'{esc(it["prev_amount_txt"])}</span>')
+        sb = it.get("same_band_prev")
+        if "same_band_prev" in it:
+            chg += (f'<span class="prev">같은 {esc(it["floor_band"])} 직전 {esc(sb["date"])} · '
+                    f'{esc(sb["floor"])}층 · {esc(sb["amount_txt"])} ({sb["diff_pct"]:+.1f}%)</span>'
+                    if sb else f'<span class="prev">같은 {esc(it["floor_band"])} 직전거래 없음</span>')
 
     amt_cls = "amt num cancel" if it["cancelled"] else "amt num"
     cancel_note = (f'<span class="prev">계약해제 {esc(it["cancel_day"])}</span>'

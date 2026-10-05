@@ -45,8 +45,16 @@ def summary_md(data: dict) -> str:
                 bits.append("직전거래 확인 불가")
             else:
                 arrow = "상승" if it["diff"] > 0 else "하락" if it["diff"] < 0 else "보합"
-                bits.append(f"직전 {it['prev_date']} {it['prev_amount_txt']} 대비 "
+                pf = f" {it['prev_floor']}층" if it.get("prev_floor") else ""
+                bits.append(f"직전 {it['prev_date']}{pf} {it['prev_amount_txt']} 대비 "
                             f"{it['diff_txt']} ({it['diff_pct']:+.1f}%) {arrow}")
+                if "same_band_prev" in it:
+                    sb = it["same_band_prev"]
+                    if sb:
+                        bits.append(f"층대 다름 → 같은 {it['floor_band']} 직전 {sb['date']} "
+                                    f"{sb['floor']}층 {sb['amount_txt']} 대비 {sb['diff_pct']:+.1f}%")
+                    else:
+                        bits.append(f"층대 다름 → 같은 {it['floor_band']} 직전거래 없음")
             if it["cancelled"]:
                 bits.append(f"⚠ 계약해제({it['cancel_day']})")
             if it.get("redev"):
