@@ -62,6 +62,12 @@ jobs:
         env:
           MOLIT_SERVICE_KEY: ${{ secrets.MOLIT_SERVICE_KEY }}
         run: python watch_stats.py
+      - name: 원장 보관함·동별 통계 (실패해도 계속)
+        continue-on-error: true
+        timeout-minutes: 15
+        env:
+          MOLIT_SERVICE_KEY: ${{ secrets.MOLIT_SERVICE_KEY }}
+        run: python ledger_export.py
       - name: 결과 커밋
         if: steps.guard.outputs.done != 'true'
         run: |
@@ -70,6 +76,7 @@ jobs:
           git add index.html summary.md prev_snapshot.json.gz
           git add regions.json regions_*.json || true
           git add watch.json || true
+          git add ledger stats || true
           if git diff --staged --quiet; then
             echo "변경 없음"
           else
