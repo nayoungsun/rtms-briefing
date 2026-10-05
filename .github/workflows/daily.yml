@@ -57,7 +57,11 @@ jobs:
       - name: 지역 월별 통계 (실패해도 계속)
         continue-on-error: true
         run: python region_stats.py
-
+      - name: 고정 관심 단지 체결 장부 (실패해도 계속)
+        continue-on-error: true
+        env:
+          MOLIT_SERVICE_KEY: ${{ secrets.MOLIT_SERVICE_KEY }}
+        run: python watch_stats.py
       - name: 결과 커밋
         if: steps.guard.outputs.done != 'true'
         run: |
@@ -65,6 +69,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html summary.md prev_snapshot.json.gz
           git add regions.json regions_*.json || true
+          git add watch.json || true
           if git diff --staged --quiet; then
             echo "변경 없음"
           else
