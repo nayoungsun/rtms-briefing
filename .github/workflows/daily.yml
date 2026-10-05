@@ -54,9 +54,6 @@ jobs:
       - name: 리포트 페이지 생성
         if: steps.guard.outputs.done != 'true'
         run: python build_site.py
-      - name: 지역 월별 통계 (실패해도 계속)
-        continue-on-error: true
-        run: python region_stats.py
       - name: 고정 관심 단지 체결 장부 (실패해도 계속)
         continue-on-error: true
         env:
@@ -68,7 +65,10 @@ jobs:
         env:
           MOLIT_SERVICE_KEY: ${{ secrets.MOLIT_SERVICE_KEY }}
         run: python ledger_export.py
-      # ★추가 — 매수 지도·업무지구 해부도용 관심 후보 장부 (ledger_export.py 다음에 실행)
+      # ★이동 — 지역 월별 통계는 원장 보관함(ledger/)을 읽으므로 ledger_export.py 다음에 실행
+      - name: 지역 월별 통계 (실패해도 계속)
+        continue-on-error: true
+        run: python region_stats.py
       - name: 관심 후보 장부 focus (실패해도 계속)
         continue-on-error: true
         run: python focus_stats.py
@@ -81,7 +81,7 @@ jobs:
           git add regions.json regions_*.json || true
           git add watch.json || true
           git add ledger stats || true
-          git add focus_*.json || true   # ★추가
+          git add focus_*.json || true
           if git diff --staged --quiet; then
             echo "변경 없음"
           else
