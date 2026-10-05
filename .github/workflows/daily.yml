@@ -68,6 +68,10 @@ jobs:
         env:
           MOLIT_SERVICE_KEY: ${{ secrets.MOLIT_SERVICE_KEY }}
         run: python ledger_export.py
+      # ★추가 — 매수 지도·업무지구 해부도용 관심 후보 장부 (ledger_export.py 다음에 실행)
+      - name: 관심 후보 장부 focus (실패해도 계속)
+        continue-on-error: true
+        run: python focus_stats.py
       - name: 결과 커밋
         if: steps.guard.outputs.done != 'true'
         run: |
@@ -77,6 +81,7 @@ jobs:
           git add regions.json regions_*.json || true
           git add watch.json || true
           git add ledger stats || true
+          git add focus_*.json || true   # ★추가
           if git diff --staged --quiet; then
             echo "변경 없음"
           else
