@@ -1,9 +1,14 @@
-"""prev_snapshot.json.gz -> regions.json (실거래 흐름판용 시군구·월별 통계)
+"""ledger/ (원장 보관함) -> regions.json · regions_<band>.json (실거래 흐름판용 시군구·월별 통계)
 
-rtms.py 가 저장한 스냅샷(최근 diff_months 개월 전체 거래 키)을 읽어
-시군구 x 월 x 평형대별로 평균가·중앙값·평당가·거래건수·최고가를 계산한다.
-지난 실행의 regions.json 에 있던 더 오래된 달은 그대로 이어 붙여(최대 12개월)
-시간이 지날수록 기간이 길어진다. 이 스크립트가 실패해도 브리핑에는 영향이 없다.
+2026-10-05 개정: 스냅샷(최근 3개월)만 보던 방식을 원장 보관함 ledger/<코드>/<YYYYMM>.json 전체
+(최대 12개월)로 바꿨다. 그래서 흐름판의 3·6개월 창과 급지 분류(최근 6개 완결월)가 바로 계산된다.
+ledger_export.py 다음에 실행해야 한다(ledger/ 가 먼저 갱신돼야 하므로).
+ledger/ 가 아직 없으면 예전처럼 스냅샷으로 계산한다.
+
+- 계약해제 행 제외(원장 해제 표시 기준). 금액 단위 만원, 평당가는 전용면적 기준.
+- 부분월(행 마지막 칸 1): 신고기한(계약 후 30일)이 아직 안 끝난 달 = 그 달 말일 + 30일이 as_of 이후인 달.
+  latest_complete = 부분월이 아닌 가장 최근 달. (예: as_of 10-05 → 9월·10월 부분월, 완결월 8월)
+이 스크립트가 실패해도 브리핑에는 영향이 없다.
 """
 from __future__ import annotations
 
@@ -12,7 +17,7 @@ import json
 import os
 import statistics
 import sys
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 
 KST = timezone(timedelta(hours=9))
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -78,25 +83,59 @@ def main() -> None:
 
     today = datetime.now(KST).date()
     as_of = (snap.get("meta") or {}).get("report_date") or today.isoformat()
-    cur_ym = as_of[:7]
-    y, m = int(cur_ym[:4]), int(cur_ym[5:7])
-    latest_complete = f"{y - 1}-12" if m == 1 else f"{y}-{m - 1:02d}"
+    as_of_d = date.fromisoformat(as_of)
+
+    def is_partial(ym: str) -> bool:
+        y, m = int(ym[:4]), int(ym[5:7])
+        last = date(y + (m == 12), m % 12 + 1, 1) - timedelta(days=1)
+        return last + timedelta(days=30) >= as_of_d
 
     regions = {r["code"]: r for r in cfg["regions"]}
     # bucket[(band, code, ym)] = [(amount, per_py), ...]
     bucket: dict[tuple, list] = {}
     n_ok = 0
-    for key in snap.get("keys", []):
-        rec = parse_key(key)
-        if not rec or rec["cancel"] or rec["sgg"] not in regions or rec["area"] <= 0:
-            continue
+
+    def add(code: str, ym: str, area: float, amount: int) -> None:
+        nonlocal n_ok
+        if area <= 0:
+            return
         n_ok += 1
-        per_py = rec["amount"] / (rec["area"] / PY)
+        per_py = amount / (area / PY)
         for b, spec in BANDS.items():
-            if spec["lo"] <= rec["area"] < spec["hi"]:
-                bucket.setdefault((b, rec["sgg"], rec["ym"]), []).append((rec["amount"], per_py))
+            if spec["lo"] <= area < spec["hi"]:
+                bucket.setdefault((b, code, ym), []).append((amount, per_py))
+
+    ledger_dir = os.path.join(HERE, "ledger")
+    source = "국토부 아파트 매매 실거래 원장 — ledger/ 원장 보관함(계약해제 제외)"
+    if os.path.isdir(ledger_dir):
+        for code in regions:
+            d = os.path.join(ledger_dir, code)
+            if not os.path.isdir(d):
+                continue
+            for fn in sorted(os.listdir(d)):
+                if not fn.endswith(".json"):
+                    continue
+                try:
+                    with open(os.path.join(d, fn), encoding="utf-8") as f:
+                        doc = json.load(f)
+                except Exception:
+                    continue
+                ym = f"{fn[:4]}-{fn[4:6]}"
+                for r in doc.get("rows", []):
+                    if r[6] or not r[2]:
+                        continue
+                    add(code, ym, float(r[2]), int(r[5]))
+    else:
+        source = "국토부 아파트 매매 실거래 원장(rtms.py 스냅샷, 계약해제 제외)"
+        for key in snap.get("keys", []):
+            rec = parse_key(key)
+            if not rec or rec["cancel"] or rec["sgg"] not in regions:
+                continue
+            add(rec["sgg"], rec["ym"], rec["area"], rec["amount"])
 
     fresh_months = sorted({k[2] for k in bucket})
+    done = [ym for ym in fresh_months if not is_partial(ym)]
+    latest_complete = done[-1] if done else None
 
     prev_path = os.path.join(HERE, "regions.json")
     prev = {}
@@ -121,7 +160,7 @@ def main() -> None:
                 pys = [p for _, p in deals]
                 rows[ym] = [ym, round(sum(amts) / len(amts)), round(statistics.median(amts)),
                             round(sum(pys) / len(pys)), len(amts), max(amts),
-                            1 if ym == cur_ym else 0]
+                            1 if is_partial(ym) else 0]
             # 지난 파일에서 이번 창보다 오래된 달만 이어 붙인다
             old = (((prev.get("bands") or {}).get(b) or {}).get("regions") or {}).get(name) or {}
             for row in old.get("m", []):
@@ -138,7 +177,7 @@ def main() -> None:
 
     out = {"generated_at": datetime.now(KST).isoformat(timespec="seconds"),
            "as_of": as_of, "latest_complete": latest_complete,
-           "source": "국토부 아파트 매매 실거래 원장(rtms.py 스냅샷, 계약해제 제외)",
+           "source": source,
            "records_used": n_ok, "fresh_months": fresh_months, "bands": out_bands}
     with open(prev_path, "w", encoding="utf-8") as f:
         json.dump(out, f, ensure_ascii=False, separators=(",", ":"))
