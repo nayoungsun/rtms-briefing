@@ -66,6 +66,40 @@
      "note": "원장 단지명은 '현대'(K-apt 청계현대아파트 A13381608) · 마장동의 '현대'는 이 단지 하나"}
   ],
 
+  "_comment_ledger": "원장 보관함(ledger_export.py → ledger/, stats/). 브리핑 37개 시군구 + extra_regions(브리핑에는 안 나오고 통계·조회용으로만 보관)를 최근 keep_months개월 보관한다. 화성 4개 구는 2026-02 분구 이후 코드라 그 이전 달은 비어 있을 수 있다.",
+  "ledger": {
+    "keep_months": 12,
+    "api_budget": 120,
+    "extra_refresh_days": 2,
+    "time_limit_sec": 600,
+    "extra_regions": [
+      {"code": "41450", "sido": "하남", "sgg": "하남시"},
+      {"code": "41171", "sido": "안양", "sgg": "만안구"},
+      {"code": "41173", "sido": "안양", "sgg": "동안구"},
+      {"code": "41430", "sido": "의왕", "sgg": "의왕시"},
+      {"code": "41410", "sido": "군포", "sgg": "군포시"},
+      {"code": "41310", "sido": "구리", "sgg": "구리시"},
+      {"code": "41360", "sido": "남양주", "sgg": "남양주시"},
+      {"code": "41271", "sido": "안산", "sgg": "상록구"},
+      {"code": "41273", "sido": "안산", "sgg": "단원구"},
+      {"code": "41281", "sido": "고양", "sgg": "덕양구"},
+      {"code": "41285", "sido": "고양", "sgg": "일산동구"},
+      {"code": "41287", "sido": "고양", "sgg": "일산서구"},
+      {"code": "41570", "sido": "김포", "sgg": "김포시"},
+      {"code": "41192", "sido": "부천", "sgg": "원미구"},
+      {"code": "41194", "sido": "부천", "sgg": "소사구"},
+      {"code": "41196", "sido": "부천", "sgg": "오정구"},
+      {"code": "41390", "sido": "시흥", "sgg": "시흥시"},
+      {"code": "41610", "sido": "광주", "sgg": "광주시"},
+      {"code": "41591", "sido": "화성", "sgg": "만세구"},
+      {"code": "41593", "sido": "화성", "sgg": "효행구"},
+      {"code": "41595", "sido": "화성", "sgg": "병점구"},
+      {"code": "41597", "sido": "화성", "sgg": "동탄구"},
+      {"code": "41220", "sido": "평택", "sgg": "평택시"},
+      {"code": "41370", "sido": "오산", "sgg": "오산시"}
+    ]
+  },
+
   "_comment_redev": "재건축/재개발 이슈 단지 워치리스트. name_contains 는 API 의 aptNm 부분일치로 매칭한다. 자동 판정(준공 30년 경과)과 별개로 구체 진행단계를 붙여 표시한다.",
   "redevelopment_watchlist": [
     {"sgg": "과천시", "name_contains": "주공10", "stage": "재건축 추진 (1984년 준공·재건축연한 도래, 과천 잔여 주공 단지)"},
