@@ -129,4 +129,732 @@
     {"sgg": "영등포구", "name_contains": "삼부", "stage": "여의도 재건축"},
     {"sgg": "영등포구", "name_contains": "한양", "stage": "여의도 재건축"}
   ]
-}
+,{
+  "_comment_focus": "매수 지도 후보 단지 체결 장부(focus_stats.py → focus_<group>.json). lawd + umd(법정동) + apt_names(원장 단지명 정확 일치). 후보가 바뀌면 이 목록만 고치면 된다.",
+  "focus_complexes": [
+    {
+      "group": "maesu",
+      "id": "hwanghak_lotte",
+      "label": "황학 롯데캐슬",
+      "lawd": "11140",
+      "umd": "황학동",
+      "apt_names": [
+        "롯데캐슬"
+      ]
+    },
+    {
+      "group": "maesu",
+      "id": "namsan",
+      "label": "남산타운",
+      "lawd": "11140",
+      "umd": "신당동",
+      "apt_names": [
+        "남산타운"
+      ]
+    },
+    {
+      "group": "maesu",
+      "id": "yaksu_heights",
+      "label": "약수하이츠",
+      "lawd": "11140",
+      "umd": "신당동",
+      "apt_names": [
+        "약수하이츠"
+      ]
+    },
+    {
+      "group": "maesu",
+      "id": "cheonggye",
+      "label": "청계현대",
+      "lawd": "11200",
+      "umd": "마장동",
+      "apt_names": [
+        "현대"
+      ]
+    },
+    {
+      "group": "maesu",
+      "id": "tenshill2",
+      "label": "텐즈힐2",
+      "lawd": "11200",
+      "umd": "상왕십리동",
+      "apt_names": [
+        "텐즈힐(2단지)"
+      ]
+    },
+    {
+      "group": "maesu",
+      "id": "centras",
+      "label": "센트라스",
+      "lawd": "11200",
+      "umd": "하왕십리동",
+      "apt_names": [
+        "센트라스"
+      ]
+    },
+    {
+      "group": "maesu",
+      "id": "pungrim_iwon",
+      "label": "왕십리풍림아이원",
+      "lawd": "11200",
+      "umd": "하왕십리동",
+      "apt_names": [
+        "왕십리풍림아이원"
+      ]
+    },
+    {
+      "group": "maesu",
+      "id": "geumho_bestvill",
+      "label": "금호베스트빌",
+      "lawd": "11200",
+      "umd": "하왕십리동",
+      "apt_names": [
+        "금호베스트빌"
+      ]
+    },
+    {
+      "group": "maesu",
+      "id": "haengdang_hanjin",
+      "label": "행당한진타운",
+      "lawd": "11200",
+      "umd": "행당동",
+      "apt_names": [
+        "행당한진타운"
+      ]
+    },
+    {
+      "group": "maesu",
+      "id": "sky_l65",
+      "label": "청량리 SKY-L65",
+      "lawd": "11230",
+      "umd": "전농동",
+      "apt_names": [
+        "청량리역롯데캐슬 SKY-L65"
+      ]
+    },
+    {
+      "group": "maesu",
+      "id": "jeonnong_misozium",
+      "label": "신성미소지움(전농)",
+      "lawd": "11230",
+      "umd": "전농동",
+      "apt_names": [
+        "전농동신성미소지움"
+      ]
+    },
+    {
+      "group": "maesu",
+      "id": "raemian_areumsup",
+      "label": "래미안아름숲",
+      "lawd": "11230",
+      "umd": "전농동",
+      "apt_names": [
+        "래미안아름숲"
+      ]
+    },
+    {
+      "group": "maesu",
+      "id": "raemian_weave",
+      "label": "래미안위브(답십리)",
+      "lawd": "11230",
+      "umd": "답십리동",
+      "apt_names": [
+        "래미안위브"
+      ]
+    },
+    {
+      "group": "maesu",
+      "id": "hwigyeong_haemoro",
+      "label": "휘경해모로프레스티지",
+      "lawd": "11230",
+      "umd": "휘경동",
+      "apt_names": [
+        "휘경해모로프레스티지"
+      ]
+    },
+    {
+      "group": "maesu",
+      "id": "imun2",
+      "label": "래미안이문2차",
+      "lawd": "11230",
+      "umd": "이문동",
+      "apt_names": [
+        "래미안이문2차"
+      ]
+    },
+    {
+      "group": "maesu",
+      "id": "classia",
+      "label": "롯데캐슬클라시아",
+      "lawd": "11290",
+      "umd": "길음동",
+      "apt_names": [
+        "롯데캐슬클라시아"
+      ]
+    },
+    {
+      "group": "maesu",
+      "id": "gireum5",
+      "label": "길음뉴타운5단지",
+      "lawd": "11290",
+      "umd": "길음동",
+      "apt_names": [
+        "길음뉴타운5단지(래미안)"
+      ]
+    },
+    {
+      "group": "maesu",
+      "id": "ecopyeon_bomun",
+      "label": "이편한세상보문",
+      "lawd": "11290",
+      "umd": "보문동3가",
+      "apt_names": [
+        "이편한세상보문"
+      ]
+    },
+    {
+      "group": "maesu",
+      "id": "bomun_richwill",
+      "label": "보문리슈빌하우트",
+      "lawd": "11290",
+      "umd": "보문동1가",
+      "apt_names": [
+        "보문리슈빌하우트"
+      ]
+    },
+    {
+      "group": "maesu",
+      "id": "raemian_lacent",
+      "label": "래미안라센트",
+      "lawd": "11290",
+      "umd": "종암동",
+      "apt_names": [
+        "래미안라센트"
+      ]
+    },
+    {
+      "group": "maesu",
+      "id": "jangwi_firsthigh",
+      "label": "래미안장위퍼스트하이",
+      "lawd": "11290",
+      "umd": "장위동",
+      "apt_names": [
+        "래미안장위퍼스트하이"
+      ]
+    },
+    {
+      "group": "maesu",
+      "id": "forest_county",
+      "label": "래미안포레카운티",
+      "lawd": "11290",
+      "umd": "장위동",
+      "apt_names": [
+        "래미안포레카운티"
+      ]
+    },
+    {
+      "group": "maesu",
+      "id": "dream_ipark",
+      "label": "꿈의숲아이파크",
+      "lawd": "11290",
+      "umd": "장위동",
+      "apt_names": [
+        "꿈의숲아이파크"
+      ]
+    },
+    {
+      "group": "maesu",
+      "id": "artrich",
+      "label": "래미안아트리치",
+      "lawd": "11290",
+      "umd": "석관동",
+      "apt_names": [
+        "래미안아트리치"
+      ]
+    },
+    {
+      "group": "maesu",
+      "id": "hakyeoul_cheonggu",
+      "label": "학여울청구",
+      "lawd": "11350",
+      "umd": "하계동",
+      "apt_names": [
+        "학여울청구"
+      ]
+    },
+    {
+      "group": "maesu",
+      "id": "cheonggu3",
+      "label": "청구3차(중계)",
+      "lawd": "11350",
+      "umd": "중계동",
+      "apt_names": [
+        "청구3"
+      ]
+    },
+    {
+      "group": "maesu",
+      "id": "junggye_green1",
+      "label": "중계그린1단지",
+      "lawd": "11350",
+      "umd": "중계동",
+      "apt_names": [
+        "중계그린1단지"
+      ]
+    },
+    {
+      "group": "maesu",
+      "id": "sanggye7",
+      "label": "상계주공7(고층)",
+      "lawd": "11350",
+      "umd": "상계동",
+      "apt_names": [
+        "상계주공7(고층)"
+      ]
+    },
+    {
+      "group": "maesu",
+      "id": "changdong3",
+      "label": "창동주공3(해등)",
+      "lawd": "11320",
+      "umd": "창동",
+      "apt_names": [
+        "창동주공3단지(해등마을)"
+      ]
+    },
+    {
+      "group": "maesu",
+      "id": "changdong4",
+      "label": "창동주공4",
+      "lawd": "11320",
+      "umd": "창동",
+      "apt_names": [
+        "창동주공4단지"
+      ]
+    },
+    {
+      "group": "maesu",
+      "id": "jayeon_hillstate",
+      "label": "자연앤힐스테이트(광교)",
+      "lawd": "41117",
+      "umd": "이의동",
+      "apt_names": [
+        "자연앤힐스테이트"
+      ]
+    },
+    {
+      "group": "maesu",
+      "id": "hillstate_gwanggyo",
+      "label": "힐스테이트광교",
+      "lawd": "41117",
+      "umd": "하동",
+      "apt_names": [
+        "힐스테이트광교"
+      ]
+    },
+    {
+      "group": "maesu",
+      "id": "suji_dongbu",
+      "label": "수지 동부",
+      "lawd": "41465",
+      "umd": "풍덕천동",
+      "apt_names": [
+        "동부"
+      ]
+    },
+    {
+      "group": "maesu",
+      "id": "suji_samik",
+      "label": "수지 삼익",
+      "lawd": "41465",
+      "umd": "풍덕천동",
+      "apt_names": [
+        "삼익아파트"
+      ]
+    },
+    {
+      "group": "maesu",
+      "id": "dongcheon_central_xi",
+      "label": "동천센트럴자이",
+      "lawd": "41465",
+      "umd": "동천동",
+      "apt_names": [
+        "동천센트럴자이"
+      ]
+    },
+    {
+      "group": "maesu",
+      "id": "cheolsan_prugio",
+      "label": "철산푸르지오하늘채",
+      "lawd": "41210",
+      "umd": "철산동",
+      "apt_names": [
+        "철산푸르지오하늘채"
+      ]
+    },
+    {
+      "group": "maesu",
+      "id": "cheolsan_raemian_xi",
+      "label": "철산래미안자이",
+      "lawd": "41210",
+      "umd": "철산동",
+      "apt_names": [
+        "철산래미안자이"
+      ]
+    },
+    {
+      "group": "maesu",
+      "id": "cheolsan_lotte_sk",
+      "label": "철산역롯데캐슬&SKVIEW",
+      "lawd": "41210",
+      "umd": "철산동",
+      "apt_names": [
+        "철산역롯데캐슬&SKVIEW클래스티지"
+      ]
+    },
+    {
+      "group": "maesu",
+      "id": "haan_doosan",
+      "label": "광명 두산위브트레지움",
+      "lawd": "41210",
+      "umd": "하안동",
+      "apt_names": [
+        "광명 두산위브 트레지움"
+      ]
+    }
+  ],
+  "_comment_focus_dongs": "업무지구 해부도 배후 주거 법정동 묶음(focus_stats.py → focus_district.json의 dongs). umd는 법정동 목록(여러 개 가능).",
+  "focus_dongs": [
+    {
+      "group": "district",
+      "id": "yeoksam",
+      "label": "역삼",
+      "lawd": "11680",
+      "umd": [
+        "역삼동"
+      ]
+    },
+    {
+      "group": "district",
+      "id": "daechi",
+      "label": "대치",
+      "lawd": "11680",
+      "umd": [
+        "대치동"
+      ]
+    },
+    {
+      "group": "district",
+      "id": "suseo",
+      "label": "수서",
+      "lawd": "11680",
+      "umd": [
+        "수서동"
+      ]
+    },
+    {
+      "group": "district",
+      "id": "jamsil",
+      "label": "잠실",
+      "lawd": "11710",
+      "umd": [
+        "잠실동",
+        "신천동"
+      ]
+    },
+    {
+      "group": "district",
+      "id": "yeouido",
+      "label": "여의도",
+      "lawd": "11560",
+      "umd": [
+        "여의도동"
+      ]
+    },
+    {
+      "group": "district",
+      "id": "dangsan",
+      "label": "당산",
+      "lawd": "11560",
+      "umd": [
+        "당산동2가",
+        "당산동3가",
+        "당산동4가",
+        "당산동5가"
+      ]
+    },
+    {
+      "group": "district",
+      "id": "gongdeok",
+      "label": "공덕",
+      "lawd": "11440",
+      "umd": [
+        "공덕동",
+        "신공덕동"
+      ]
+    },
+    {
+      "group": "district",
+      "id": "magok",
+      "label": "마곡·방화",
+      "lawd": "11500",
+      "umd": [
+        "마곡동",
+        "방화동"
+      ]
+    },
+    {
+      "group": "district",
+      "id": "doksan",
+      "label": "독산(G밸리 배후)",
+      "lawd": "11545",
+      "umd": [
+        "독산동"
+      ]
+    },
+    {
+      "group": "district",
+      "id": "wangsimni",
+      "label": "왕십리",
+      "lawd": "11200",
+      "umd": [
+        "하왕십리동",
+        "행당동"
+      ]
+    },
+    {
+      "group": "district",
+      "id": "seongsu",
+      "label": "성수",
+      "lawd": "11200",
+      "umd": [
+        "성수동1가",
+        "성수동2가"
+      ]
+    },
+    {
+      "group": "district",
+      "id": "majang",
+      "label": "마장",
+      "lawd": "11200",
+      "umd": [
+        "마장동"
+      ]
+    },
+    {
+      "group": "district",
+      "id": "cheongnyangni",
+      "label": "청량리",
+      "lawd": "11230",
+      "umd": [
+        "전농동"
+      ]
+    },
+    {
+      "group": "district",
+      "id": "sindang",
+      "label": "약수·신당",
+      "lawd": "11140",
+      "umd": [
+        "신당동"
+      ]
+    },
+    {
+      "group": "district",
+      "id": "gireum",
+      "label": "길음",
+      "lawd": "11290",
+      "umd": [
+        "길음동"
+      ]
+    },
+    {
+      "group": "district",
+      "id": "changdong",
+      "label": "창동",
+      "lawd": "11320",
+      "umd": [
+        "창동"
+      ]
+    },
+    {
+      "group": "district",
+      "id": "sanggye",
+      "label": "상계",
+      "lawd": "11350",
+      "umd": [
+        "상계동"
+      ]
+    },
+    {
+      "group": "district",
+      "id": "mokdong",
+      "label": "오목교",
+      "lawd": "11470",
+      "umd": [
+        "목동"
+      ]
+    },
+    {
+      "group": "district",
+      "id": "pangyo",
+      "label": "판교",
+      "lawd": "41135",
+      "umd": [
+        "백현동",
+        "삼평동"
+      ]
+    },
+    {
+      "group": "district",
+      "id": "jeongja",
+      "label": "정자",
+      "lawd": "41135",
+      "umd": [
+        "정자동"
+      ]
+    },
+    {
+      "group": "district",
+      "id": "migeum",
+      "label": "미금",
+      "lawd": "41135",
+      "umd": [
+        "구미동",
+        "금곡동"
+      ]
+    },
+    {
+      "group": "district",
+      "id": "wirye_s",
+      "label": "남위례",
+      "lawd": "41131",
+      "umd": [
+        "창곡동"
+      ]
+    },
+    {
+      "group": "district",
+      "id": "gwacheon",
+      "label": "과천",
+      "lawd": "41290",
+      "umd": [
+        "원문동",
+        "별양동",
+        "중앙동",
+        "부림동",
+        "갈현동"
+      ]
+    },
+    {
+      "group": "district",
+      "id": "indeogwon",
+      "label": "인덕원",
+      "lawd": "41173",
+      "umd": [
+        "관양동"
+      ]
+    },
+    {
+      "group": "district",
+      "id": "pyeongchon",
+      "label": "평촌",
+      "lawd": "41173",
+      "umd": [
+        "평촌동"
+      ]
+    },
+    {
+      "group": "district",
+      "id": "suji_office",
+      "label": "수지구청",
+      "lawd": "41465",
+      "umd": [
+        "풍덕천동"
+      ]
+    },
+    {
+      "group": "district",
+      "id": "sanghyeon",
+      "label": "상현",
+      "lawd": "41465",
+      "umd": [
+        "상현동"
+      ]
+    },
+    {
+      "group": "district",
+      "id": "gwanggyo",
+      "label": "광교중앙",
+      "lawd": "41117",
+      "umd": [
+        "이의동"
+      ]
+    },
+    {
+      "group": "district",
+      "id": "yeongtong",
+      "label": "영통",
+      "lawd": "41117",
+      "umd": [
+        "영통동"
+      ]
+    },
+    {
+      "group": "district",
+      "id": "giheung",
+      "label": "기흥",
+      "lawd": "41463",
+      "umd": [
+        "구갈동"
+      ]
+    },
+    {
+      "group": "district",
+      "id": "dongtan",
+      "label": "동탄",
+      "lawd": "41597",
+      "umd": [
+        "청계동",
+        "영천동"
+      ]
+    },
+    {
+      "group": "district",
+      "id": "cheolsan",
+      "label": "철산",
+      "lawd": "41210",
+      "umd": [
+        "철산동"
+      ]
+    },
+    {
+      "group": "district",
+      "id": "myongji",
+      "label": "명지대(처인)",
+      "lawd": "41461",
+      "umd": [
+        "역북동"
+      ]
+    },
+    {
+      "group": "district",
+      "id": "godeok",
+      "label": "평택 고덕",
+      "lawd": "41220",
+      "umd": [
+        "고덕동"
+      ]
+    },
+    {
+      "group": "district",
+      "id": "ilsan_janghang",
+      "label": "일산 장항·마두",
+      "lawd": "41285",
+      "umd": [
+        "장항동",
+        "마두동"
+      ]
+    }
+  ]
+}}
