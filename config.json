@@ -128,8 +128,7 @@
     {"sgg": "영등포구", "name_contains": "시범", "stage": "여의도 재건축"},
     {"sgg": "영등포구", "name_contains": "삼부", "stage": "여의도 재건축"},
     {"sgg": "영등포구", "name_contains": "한양", "stage": "여의도 재건축"}
-  ]
-,{
+  ],
   "_comment_focus": "매수 지도 후보 단지 체결 장부(focus_stats.py → focus_<group>.json). lawd + umd(법정동) + apt_names(원장 단지명 정확 일치). 후보가 바뀌면 이 목록만 고치면 된다.",
   "focus_complexes": [
     {
@@ -857,4 +856,4 @@
       ]
     }
   ]
-}}
+}
