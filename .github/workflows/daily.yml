@@ -2,8 +2,10 @@ name: 실거래 등록 브리핑
 
 on:
   schedule:
-    - cron: '30 21 * * *'   # 06:30 KST
-    - cron: '0 22 * * *'    # 07:00 KST (예비 — 앞쪽이 스킵될 경우 대비)
+    - cron: '7 21 * * *'    # 06:07 KST (1차)
+    - cron: '41 21 * * *'   # 06:41 KST (예비 1)
+    - cron: '23 22 * * *'   # 07:23 KST (예비 2)
+    - cron: '11 23 * * *'   # 08:11 KST (예비 3 — 앞이 전부 밀리거나 빠질 때)
   workflow_dispatch:
     inputs:
       force:
