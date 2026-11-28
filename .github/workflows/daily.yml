@@ -76,6 +76,7 @@ jobs:
         run: python focus_stats.py
       # KB부동산 주간 원자료(매매지수·매수우위·매매거래) — 실거래 흐름판 토요일 주간 갱신이 kb/ 를 읽는다
       - name: KB 주간 원자료 (실패해도 계속)
+        if: always()
         continue-on-error: true
         timeout-minutes: 5
         run: python kb_weekly.py
@@ -97,9 +98,10 @@ jobs:
             git push || { git pull --rebase && git push; }
           fi
 
-      # 오늘 실거래 수집이 이미 끝난 실행(예비 시각·수동 실행)에서도 KB 원자료만은 커밋한다
+      # 실거래 수집이 이미 끝났거나(예비 시각·수동 실행) 실패한 실행에서도 KB 원자료만은 커밋한다
+      # (정상 실행이면 위 「결과 커밋」이 kb/까지 커밋해 여기서는 "KB 변경 없음"으로 끝난다)
       - name: KB 원자료만 커밋
-        if: steps.guard.outputs.done == 'true'
+        if: always()
         run: |
           git config user.name  "rtms-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
