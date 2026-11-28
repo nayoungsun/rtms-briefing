@@ -1,0 +1,112 @@
+name: 실거래 등록 브리핑
+
+on:
+  schedule:
+    - cron: '7 21 * * *'    # 06:07 KST (1차)
+    - cron: '41 21 * * *'   # 06:41 KST (예비 1)
+    - cron: '23 22 * * *'   # 07:23 KST (예비 2)
+    - cron: '11 23 * * *'   # 08:11 KST (예비 3 — 앞이 전부 밀리거나 빠질 때)
+  workflow_dispatch:
+    inputs:
+      force:
+        description: '오늘 이미 수집됐어도 강제로 다시 수집'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: briefing
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: 오늘 이미 수집됐는지 확인
+        id: guard
+        run: |
+          if [ "${{ github.event.inputs.force }}" = "true" ]; then
+            echo "강제 실행 — 가드 무시하고 수집합니다"
+            echo "done=false" >> "$GITHUB_OUTPUT"
+          elif python -c "import gzip,json,sys;from datetime import datetime,timezone,timedelta;d=json.load(gzip.open('prev_snapshot.json.gz','rt',encoding='utf-8'));sys.exit(0 if d.get('meta',{}).get('report_date')==datetime.now(timezone(timedelta(hours=9))).date().isoformat() else 1)" 2>/dev/null; then
+            echo "오늘치 이미 완료 — 이후 단계를 건너뜁니다"
+            echo "done=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "오늘치 아직 없음 — 수집을 진행합니다"
+            echo "done=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: 실거래 수집 (실패 시 2분 뒤 1회 재시도)
+        if: steps.guard.outputs.done != 'true'
+        env:
+          MOLIT_SERVICE_KEY: ${{ secrets.MOLIT_SERVICE_KEY }}
+        run: |
+          python rtms.py || { echo "재시도합니다..."; sleep 120; python rtms.py; }
+
+      - name: 리포트 페이지 생성
+        if: steps.guard.outputs.done != 'true'
+        run: python build_site.py
+      - name: 고정 관심 단지 체결 장부 (실패해도 계속)
+        continue-on-error: true
+        env:
+          MOLIT_SERVICE_KEY: ${{ secrets.MOLIT_SERVICE_KEY }}
+        run: python watch_stats.py
+      - name: 원장 보관함·동별 통계 (실패해도 계속)
+        continue-on-error: true
+        timeout-minutes: 15
+        env:
+          MOLIT_SERVICE_KEY: ${{ secrets.MOLIT_SERVICE_KEY }}
+        run: python ledger_export.py
+      # ★이동 — 지역 월별 통계는 원장 보관함(ledger/)을 읽으므로 ledger_export.py 다음에 실행
+      - name: 지역 월별 통계 (실패해도 계속)
+        continue-on-error: true
+        run: python region_stats.py
+      - name: 관심 후보 장부 focus (실패해도 계속)
+        continue-on-error: true
+        run: python focus_stats.py
+      # KB부동산 주간 원자료(매매지수·매수우위·매매거래) — 실거래 흐름판 토요일 주간 갱신이 kb/ 를 읽는다
+      - name: KB 주간 원자료 (실패해도 계속)
+        continue-on-error: true
+        timeout-minutes: 5
+        run: python kb_weekly.py
+      - name: 결과 커밋
+        if: steps.guard.outputs.done != 'true'
+        run: |
+          git config user.name  "rtms-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html summary.md prev_snapshot.json.gz
+          git add regions.json regions_*.json || true
+          git add watch.json || true
+          git add ledger stats || true
+          git add focus_*.json || true
+          git add kb || true
+          if git diff --staged --quiet; then
+            echo "변경 없음"
+          else
+            git commit -m "브리핑 $(TZ=Asia/Seoul date +%Y-%m-%d)"
+            git push || { git pull --rebase && git push; }
+          fi
+
+      # 오늘 실거래 수집이 이미 끝난 실행(예비 시각·수동 실행)에서도 KB 원자료만은 커밋한다
+      - name: KB 원자료만 커밋
+        if: steps.guard.outputs.done == 'true'
+        run: |
+          git config user.name  "rtms-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add kb || true
+          if git diff --staged --quiet; then
+            echo "KB 변경 없음"
+          else
+            git commit -m "KB 주간 원자료 $(TZ=Asia/Seoul date +%Y-%m-%d)"
+            git push || { git pull --rebase && git push; }
+          fi
